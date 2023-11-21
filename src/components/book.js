@@ -8,11 +8,10 @@ import axios from "axios";
 import utils from '../utilities/util.js'
 
 export default function Book() {
-    const [userToken, setUserToken] = useState(null)
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
     const [description, setDescription] = useState("");
-    const [publishedDate, setPublishedDate] = useState(dayjs(new Date()));//dayjs(new Date())
+    const [publishedDate, setPublishedDate] = useState(dayjs(new Date()));
     const [selectedAuthor, setSelectedAuthor] = useState(null);
     const [authors, setAuthors] = useState([])
 
@@ -37,7 +36,7 @@ export default function Book() {
             // Load authors from database
             fetchData()
         }
-    }, [userToken]);
+    }, []);
 
     async function submit(e) {
         e.preventDefault();

@@ -2,6 +2,8 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import utils from '../utilities/util.js'
 import React, { useState, useEffect } from "react";
+import { Box, Stack, FormControl, FormLabel, Input, Button, Select, Option, MenuIcon, IconButton, Typography } from '@mui/joy';
+
 export function Navigation() {
   const [isAuth, setIsAuth] = useState(false);
   useEffect(() => {
@@ -10,24 +12,57 @@ export function Navigation() {
     }
   }, [isAuth]);
   return (
-    <div>
-      <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="/">Borrow A Book</Navbar.Brand>
-        <Nav className="me-auto">
-          {isAuth ? <Nav.Link href="/">Home</Nav.Link> : null}
-        </Nav>
-        <Nav>
-          {isAuth ? (
-            <>
-              <Nav.Link href="/logout">SignOut</Nav.Link>
-              <br />
-              <Nav.Link href="/book">Add Book</Nav.Link>
-            </>
-          ) : (
-            <Nav.Link href="/login">SignIn</Nav.Link>
-          )}
-        </Nav>
-      </Navbar>
-    </div>
+    <Box
+      component="header"
+      className="Header"
+      sx={[
+        {
+          p: 2,
+          gap: 2,
+          bgcolor: 'background.surface',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gridColumn: '1 / -1',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          position: 'sticky',
+          top: 0,
+          zIndex: 1100,
+        }
+      ]}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 1.5,
+        }}
+      >
+        <Typography component="h1" fontWeight="xl" href="/">
+          Borrow A Book
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 1.5,
+        }}
+      >
+        {isAuth ? (
+          <>
+            <Typography component="a" fontWeight="xl" href="/book"> Add Book </Typography>
+            <br />
+            <Typography component="a" fontWeight="xl" href="/logout"> Logout </Typography>
+          </>
+        ) : (
+          <Typography component="a" fontWeight="xl" href="/login"> Login </Typography>
+        )}
+      </Box>
+
+    </Box>
   );
 }

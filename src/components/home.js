@@ -15,6 +15,7 @@ export default function Home() {
       });
       // Process the response data
       console.log(`Books List : ${JSON.stringify(response)}`);
+      setBooks(response.data)
     } catch (error) {
       console.error('Request failed', error);
     }
@@ -28,19 +29,15 @@ export default function Home() {
       console.log(`token :: ${utils.getUserToken()}`)
       fetchData()
     }
-  }, [userToken, books]);
+  }, [userToken]);
 
   return (
 
     <div className="Auth-form-container">
       <h1> Home Page </h1>
-      {
-        (books) ?
-          <>
-            Books List
-            {/* {{ books }} */}
-          </> : null
-      }
+      {(books) ? books.map((book) => (
+        <h4>{book.title}</h4>
+      )) : null}
     </div>
   )
 }
