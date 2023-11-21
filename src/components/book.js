@@ -8,6 +8,7 @@ import axios from "axios";
 import utils from '../utilities/util.js'
 
 export default function Book() {
+    let updatedBook = {}
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
     const [description, setDescription] = useState("");
@@ -40,30 +41,58 @@ export default function Book() {
 
     async function submit(e) {
         e.preventDefault();
+        saveBook(false)
+    }
+
+    async function saveBook(forUpdate) {
         const book = {
             title: title,
             category: category,
             description: description,
-            publishedDate: publishedDate,
+            published_date: '2023-11-22',//publishedDate,
             author: selectedAuthor
         };
         console.log(`Submit Book : ${JSON.stringify(book)}`)
         if (book) {
-            const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/book/`, book,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${utils.getUserToken()}`,
-                    },
-                },
-                {
-                    withCredentials: true
-                },
-            );
-            // window.location.href = "/";
+            if (!forUpdate)
+                addBook(book)
+            else
+                updateBook(book)
         }
     }
 
+    async function addBook(newBook) {
+        const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/books/add/`, newBook,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${utils.getUserToken()}`,
+                },
+            },
+            {
+                withCredentials: true
+            },
+        );
+        console.log(`Saved Book : ${JSON.stringify(data)}`)
+        updatedBook = data
+        
+        // if (data.status === 200)
+        // window.location.href = "/";
+    }
+
+    async function updateBook(book) {
+        const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/books/${updatedBook.id}/update/`, book,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${utils.getUserToken()}`,
+                },
+            },
+            {
+                withCredentials: true
+            },
+        );
+    }
     return (
         <Box component="main"
             sx={{
@@ -117,23 +146,24 @@ export default function Book() {
                     <FormControl required>
                         <FormLabel>Publish Date</FormLabel>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker defaultValue={publishedDate} value={publishedDate}
+                            <DatePicker defaultValue={publishedDate} value={publishedDate} key={publishedDate}
                                 slotProps={{ textField: { size: 'small' } }}
                                 onChange={(date, event) => {
-                                    console.log(new Date(date));
-                                    setPublishedDate(new Date(date))
+                                    console.log(utils.formateDate(date))
+                                    // TODO set the correct date
+                                    // setPublishedDate(utils.formateDate(date))
                                 }} />
                         </LocalizationProvider>
                     </FormControl>
 
                     {/* Author Field */}
                     <Select placeholder="Choose an author" onChange={(e, newValue) => {
-                        let index = authors.findIndex(author => author.id === newValue);
+                        let index = authors.findIndex(author => author.name === newValue);
                         if (index !== -1)
                             setSelectedAuthor(authors[index])
                     }}>
                         {(authors) ? authors.map((auth) => (
-                            <Option key={auth.id} value={auth.id}>{auth.name}</Option>
+                            <Option key={auth.name} value={auth.name}>{auth.name}</Option>
                         )) : null}
                     </Select>
 
@@ -143,6 +173,12 @@ export default function Book() {
                         </Button>
                     </Stack>
                 </form>
+                // TODO remove the below Button
+                {/* <Stack gap={4} sx={{ mt: 2 }}>
+                    <Button onClick={()=>saveBook(true)} fullWidth>
+                        Update
+                    </Button>
+                </Stack> */}
             </Stack>
         </Box>
     );

@@ -13,23 +13,20 @@ export default function Register() {
   async function submit(e) {
     e.preventDefault();
     if (password !== confirmPassword)
-    //TODO show error
-      alert(`password don\'t matched`)
+      //TODO show error
+      alert(`passwords don\'t matched`)
     else {
       const user = {
         username: username,
         password: password,
-        email: email
-        // location: location
+        email: email,
+        location: location
       };
       console.log(`Register Data : ${JSON.stringify(user)}`)
       if (user) {
         try {
           const { data } = await axios.post(
-            `${process.env.REACT_APP_URL_APP_PATH}/register/`,
-            {
-              user_data: user,
-            },
+            `${process.env.REACT_APP_URL_APP_PATH}/register/`, user,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -103,11 +100,11 @@ export default function Register() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)} />
             <FormHelperText>
-              Opps! something is wrong.
+              {/* Opps! something is wrong. */}
             </FormHelperText>
           </FormControl>
           {/* Location Field */}
-          //TODO change to google places API
+          {/* TODO change to google places API */}
           <FormControl required>
             <FormLabel>Location</FormLabel>
             <Input

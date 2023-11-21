@@ -14,7 +14,7 @@ export default function Home() {
         },
       });
       // Process the response data
-      console.log(`Books List : ${JSON.stringify(response)}`);
+      console.log(`Books List : ${JSON.stringify(response.data)}`);
       setBooks(response.data)
     } catch (error) {
       console.error('Request failed', error);
@@ -26,7 +26,7 @@ export default function Home() {
       window.location.href = "/login";
     else {
       // Load books data
-      console.log(`token :: ${utils.getUserToken()}`)
+      //console.log(`token :: ${utils.getUserToken()}`)
       fetchData()
     }
   }, [userToken]);
@@ -36,7 +36,10 @@ export default function Home() {
     <div className="Auth-form-container">
       <h1> Home Page </h1>
       {(books) ? books.map((book) => (
-        <h4>{book.title}</h4>
+        <div>
+          <h4> ID : {book.id} , Title: {book.title}</h4>
+          <buttonsComponent/>
+        </div>
       )) : null}
     </div>
   )
