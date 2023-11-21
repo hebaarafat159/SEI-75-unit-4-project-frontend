@@ -18,7 +18,11 @@ export function Navigation() {
         </Nav>
         <Nav>
           {isAuth ? (
-            <Nav.Link href="/logout">SignOut</Nav.Link>
+            <>
+              <Nav.Link href="/logout">SignOut</Nav.Link>
+              <br />
+              <Nav.Link href="/book">Add Book</Nav.Link>
+            </>
           ) : (
             <Nav.Link href="/login">SignIn</Nav.Link>
           )}

@@ -33,5 +33,5 @@ function storeLoggedInUser(data){
 }
 
 function getRefreshToken(){
-    localStorage.getItem(LOCAL_STORAGE_REFRECH_TOKEN_KEY)
+    return localStorage.getItem(LOCAL_STORAGE_REFRECH_TOKEN_KEY)
 }
