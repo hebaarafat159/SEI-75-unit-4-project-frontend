@@ -2,6 +2,7 @@ import { Box, Stack, FormControl, FormLabel, Input, Button, FormHelperText, Info
 import { useState } from "react";
 import axios from "axios";
 import utils from '../utilities/util.js'
+import ReactGoogleAutocomplete from "react-google-autocomplete";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -9,6 +10,13 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [location, setLocation] = useState(null);
+
+  async function onPlaceSelectedHandler(place) {
+    if (place) {
+      console.log(`Place : ${JSON.stringify(place.formatted_address)}`);
+      setLocation(place.formatted_address)
+    }
+  }
 
   async function submit(e) {
     e.preventDefault();
@@ -36,8 +44,8 @@ export default function Register() {
             { withCredentials: true }
           );
           // TODO handle save new user
-          // utils.storeLoggedInUser(data)
-          // window.location.href = "/";
+          utils.storeLoggedInUser(data)
+          window.location.href = "/";
         } catch (e) {
           console.log("logout not working", e);
         }
@@ -104,14 +112,17 @@ export default function Register() {
             </FormHelperText>
           </FormControl>
           {/* Location Field */}
-          {/* TODO change to google places API */}
           <FormControl required>
             <FormLabel>Location</FormLabel>
-            <Input
+            <ReactGoogleAutocomplete required
+              apiKey={'AIzaSyBdOVHEaQ9lAlTI1tCntVcGJamHsUmkLhU'}
+              onPlaceSelected={onPlaceSelectedHandler}
+            />
+            {/* <Input
               type="text"
               name="location"
               value={location}
-              onChange={(e) => setLocation(e.target.value)} />
+              onChange={(e) => setLocation(e.target.value)} /> */}
           </FormControl>
           <Stack gap={4} sx={{ mt: 2 }}>
             <Button type="submit" fullWidth>
