@@ -14,14 +14,13 @@ export default function Book() {
     const [description, setDescription] = useState("");
     const [publishedDate, setPublishedDate] = useState(dayjs(new Date()));//dayjs(new Date())
     const [selectedAuthor, setSelectedAuthor] = useState(null);
-    const [authors, setAuthors] = useState([{ id: 5, name: "Jake", "avatar_url": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEhAPDxAPDw8PFRAQEBAPDw8PEBUPFRUWFhUVFRUYHSggGBolHRUVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDg0OGBAQGS0dFx8tKystLS0tLSstLS0tLS0tLS0tLSstLSstLS0tL" }, { id: 34, name: "Lili", "avatar_url": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBISEhIREhESEhESGhwSFBESGRIZHRgZGBwZGh0cGh4cIS4lHB8rIRoYJzgnKy8xNTU1HCQ7QDs1Py40NTEBDAwMEA8QHhISHTcsJCw0NzQ0NDQ0NDQ0NDQ0NDQ0NDQ0MTQ0NDQxNDQxN" }]);
+    const [authors, setAuthors] = useState([])
 
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwNTE5MjQxLCJpYXQiOjE3MDA1MTg2NDEsImp0aSI6ImQ3MDQyNTVhY2Y5YTQ1MzBiNDJmOGI5ZTcwODc5Y2M5IiwidXNlcl9pZCI6MX0.N5vLl7PwrPUWcYdw3PsnedwPQS8HaAU8OsiAS_SXfQ4'
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/authors', {
+            const response = await axios.get(`${process.env.REACT_APP_URL_APP_PATH}/authors/`, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${utils.getUserToken()}`,
                 },
             });
             // Process the response data
@@ -36,7 +35,7 @@ export default function Book() {
             window.location.href = "/login";
         else {
             // Load authors from database
-            // fetchData('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwNTE5MjQxLCJpYXQiOjE3MDA1MTg2NDEsImp0aSI6ImQ3MDQyNTVhY2Y5YTQ1MzBiNDJmOGI5ZTcwODc5Y2M5IiwidXNlcl9pZCI6MX0.N5vLl7PwrPUWcYdw3PsnedwPQS8HaAU8OsiAS_SXfQ4')//(utils.getRefreshToken())
+            fetchData()
         }
     }, [userToken]);
 
@@ -55,7 +54,7 @@ export default function Book() {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${utils.getUserToken()}`,
                     },
                 },
                 {

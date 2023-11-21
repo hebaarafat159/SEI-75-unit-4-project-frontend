@@ -13,6 +13,7 @@ export default function Register() {
   async function submit(e) {
     e.preventDefault();
     if (password !== confirmPassword)
+    //TODO show error
       alert(`password don\'t matched`)
     else {
       const user = {
@@ -25,14 +26,14 @@ export default function Register() {
       if (user) {
         try {
           const { data } = await axios.post(
-            "http://localhost:8000/register/",
+            `${process.env.REACT_APP_URL_APP_PATH}/register/`,
             {
               user_data: user,
             },
             {
               headers: {
                 "Content-Type": "application/json",
-                'Authorization': 'Basic '+btoa('hebaarafat:root'), 
+                'Authorization': 'Basic ' + btoa(`${process.env.BACKEND_SUPER_USER_NAME}: ${process.env.BACKEND_SUPER_USER_PASSWORD}`),
               }
             },
             { withCredentials: true }

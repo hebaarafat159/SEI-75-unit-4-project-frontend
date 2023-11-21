@@ -8,9 +8,9 @@ export default function Home() {
 
   const fetchData = async (token) => {
     try {
-      const response = await axios.get('http://localhost:8000/books', {
+      const response = await axios.get(`${process.env.REACT_APP_URL_APP_PATH}/books/`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${utils.getUserToken()}`,
         },
       });
       // Process the response data
@@ -25,17 +25,8 @@ export default function Home() {
       window.location.href = "/login";
     else {
       // Load books data
-      fetchData('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwNTEzOTg3LCJpYXQiOjE3MDA1MTMzODcsImp0aSI6IjJmYTg3ZGY2NmYxMzRlZGM4MDk1YjIxMGU0MDI1MGMxIiwidXNlcl9pZCI6MX0.kX7ITArXmD5mGUTqKBw9Bx428MbVszCZVVVJ68XT_BU')//(utils.getRefreshToken())
-      // const { data } = axios.get(
-      //   "http://localhost:8000/books",
-      //   {
-      //     refresh_token: utils.getRefreshToken(),
-      //   },
-      //   { headers: { "Content-Type": "application/json" } },
-      //   { withCredentials: true }
-      // );
-
-      // console.log(`Books List : ${JSON.stringify(data)}`);
+      console.log(`token :: ${utils.getUserToken()}`)
+      fetchData()
     }
   }, [userToken, books]);
 

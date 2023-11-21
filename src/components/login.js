@@ -15,7 +15,7 @@ export default function Login() {
         };
         // console.log(`Submit Login : ${JSON.stringify(user)}`)
         if (user) {
-            const { data } = await axios.post("http://localhost:8000/token/", user,
+            const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/token/`, user,
                 {
                     headers: { "Content-Type": "application/json" },
                 },
