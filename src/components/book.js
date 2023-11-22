@@ -34,7 +34,7 @@ export default function Book({ book }) {
         }
     }
 
-    const loadBook = async () => {
+    const loadBook = async (id) => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_URL_APP_PATH}/books/${id}`, {
                 headers: {
@@ -70,11 +70,11 @@ export default function Book({ book }) {
             // Load authors from database
             loadAuthors()
             if (id !== '0') {
-                loadBook()
+                loadBook(id)
             }
 
         }
-    }, []);
+    }, [id]);
 
     async function submit(e) {
         e.preventDefault();
@@ -99,6 +99,7 @@ export default function Book({ book }) {
     }
 
     async function addBook(newBook) {
+        // eslint-disable-next-line no-unused-vars
         const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/books/add/`, newBook,
             {
                 headers: {
@@ -117,6 +118,7 @@ export default function Book({ book }) {
     }
 
     async function updateBook(book) {
+        // eslint-disable-next-line no-unused-vars
         const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/books/${book.id}/update/`, book,
             {
                 headers: {
@@ -209,12 +211,6 @@ export default function Book({ book }) {
                         </Button>
                     </Stack>
                 </form>
-                // TODO remove the below Button
-                {/* <Stack gap={4} sx={{ mt: 2 }}>
-                    <Button onClick={()=>saveBook(true)} fullWidth>
-                        Update
-                    </Button>
-                </Stack> */}
             </Stack>
         </Box>
     );

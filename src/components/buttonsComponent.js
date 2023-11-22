@@ -5,6 +5,7 @@ import utils from '../utilities/util.js'
 export default function ButtonsComponent({ book, removeBook }) {
 
     async function deleteBook(book) {
+        // eslint-disable-next-line no-unused-vars
         const { data } = await axios.delete(`${process.env.REACT_APP_URL_APP_PATH}/books/${book.id}/delete/`, book,
             {
                 headers: {

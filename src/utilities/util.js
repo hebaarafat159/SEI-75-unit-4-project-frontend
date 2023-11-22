@@ -2,8 +2,7 @@ import axios from "axios";
 import dayjs from 'dayjs';
 const LOCAL_STORAGE_USER_TOKEN_KEY = "access_token"
 const LOCAL_STORAGE_REFRECH_TOKEN_KEY = "refresh_token"
-
-
+/* eslint-disable import/no-anonymous-default-export */
 export default {
     getUserToken,
     setUserToken,

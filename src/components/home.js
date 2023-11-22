@@ -3,7 +3,7 @@ import axios from "axios";
 import utils from '../utilities/util.js'
 import ButtonsComponent from './buttonsComponent.js'
 export default function Home() {
-  const [userToken, setUserToken] = useState(null)
+  // const [userToken, setUserToken] = useState(null)
   const [books, setBooks] = useState([])
   const [change, setChange] = useState(null)
 
@@ -32,7 +32,7 @@ export default function Home() {
     else {
       fetchData()
     }
-  }, [userToken, change]);
+  }, [change]);
 
   return (
     <div className="Auth-form-container">
