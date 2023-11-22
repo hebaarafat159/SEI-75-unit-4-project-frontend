@@ -1,8 +1,6 @@
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
 import utils from '../utilities/util.js'
 import React, { useState, useEffect } from "react";
-import { Box, Stack, FormControl, FormLabel, Input, Button, Select, Option, MenuIcon, IconButton, Typography } from '@mui/joy';
+import { Box, Typography } from '@mui/joy';
 
 export function Navigation() {
   const [isAuth, setIsAuth] = useState(false);
@@ -40,7 +38,7 @@ export function Navigation() {
           gap: 1.5,
         }}
       >
-        <Typography component="h1" fontWeight="xl" href="/">
+        <Typography component="a" fontWeight="xl" href="/">
           Borrow A Book
         </Typography>
       </Box>
@@ -54,7 +52,7 @@ export function Navigation() {
       >
         {isAuth ? (
           <>
-            <Typography component="a" fontWeight="xl" href="/book"> Add Book </Typography>
+            <Typography component="a" fontWeight="xl" href="/book/0"> Add Book </Typography>
             <br />
             <Typography component="a" fontWeight="xl" href="/logout"> Logout </Typography>
           </>

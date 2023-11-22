@@ -1,5 +1,4 @@
-import { Box, Stack, Button, Link } from '@mui/joy';
-import React, { Component } from 'react';
+import { Stack, Button } from '@mui/joy';
 import axios from "axios";
 import utils from '../utilities/util.js'
 
@@ -23,7 +22,7 @@ export default function ButtonsComponent({ book, removeBook }) {
 
     return <Stack gap={4} sx={{ mt: 2 }}>
         <Stack gap={4} sx={{ mt: 2 }}>
-            <Button fullWidth> Edit {book.title} </Button>
+            <Button fullWidth component="a" href={`/book/${book.id}`} book={book}> Edit {book.title} </Button>
             <Button onClick={()=> deleteBook(book)} fullWidth> Delete {book.id}</Button>
         </Stack>
     </Stack>

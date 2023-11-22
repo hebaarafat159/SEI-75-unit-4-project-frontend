@@ -6,9 +6,12 @@ import dayjs from 'dayjs';
 import { useState, useEffect } from "react";
 import axios from "axios";
 import utils from '../utilities/util.js'
+import { useParams } from 'react-router';
 
-export default function Book() {
-    let updatedBook = {}
+export default function Book({ book }) {
+    const { id } = useParams();
+    console.log(`UPdate Book : ${id}`)
+    // if(book) console.log(`UPdate Book : ${JSON.parse(book)}`)
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
     const [description, setDescription] = useState("");
@@ -16,7 +19,7 @@ export default function Book() {
     const [selectedAuthor, setSelectedAuthor] = useState(null);
     const [authors, setAuthors] = useState([])
 
-    const fetchData = async () => {
+    const loadAuthors = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_URL_APP_PATH}/authors/`, {
                 headers: {
@@ -30,12 +33,46 @@ export default function Book() {
             console.error('Request failed', error);
         }
     }
+
+    const loadBook = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_URL_APP_PATH}/books/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${utils.getUserToken()}`,
+                },
+            });
+            // Process the response data
+            console.log(`Book Details List : ${JSON.stringify(response.data)}`);
+            if (response.data) {
+                // set Title
+                setTitle(response.data.title)
+
+                // set Category
+                setCategory(response.data.category)
+
+                // set description
+                setDescription(response.data.description)
+
+                // set published date
+                setPublishedDate(dayjs(new Date(response.data.published_date)))
+
+                // set author
+                setSelectedAuthor(response.data.author)
+            }
+        } catch (error) {
+            console.error('Request failed', error);
+        }
+    }
     useEffect(() => {
         if (utils.getUserToken() === null)
             window.location.href = "/login";
         else {
             // Load authors from database
-            fetchData()
+            loadAuthors()
+            if (id !== '0') {
+                loadBook()
+            }
+
         }
     }, []);
 
@@ -74,14 +111,13 @@ export default function Book() {
             },
         );
         console.log(`Saved Book : ${JSON.stringify(data)}`)
-        updatedBook = data
-        
+
         // if (data.status === 200)
         // window.location.href = "/";
     }
 
     async function updateBook(book) {
-        const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/books/${updatedBook.id}/update/`, book,
+        const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/books/${book.id}/update/`, book,
             {
                 headers: {
                     "Content-Type": "application/json",

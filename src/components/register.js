@@ -1,4 +1,4 @@
-import { Box, Stack, FormControl, FormLabel, Input, Button, FormHelperText, InfoOutlined } from '@mui/joy';
+import { Box, Stack, FormControl, FormLabel, Input, Button, FormHelperText} from '@mui/joy';
 import { useState } from "react";
 import axios from "axios";
 import utils from '../utilities/util.js'
@@ -22,7 +22,7 @@ export default function Register() {
     e.preventDefault();
     if (password !== confirmPassword)
       //TODO show error
-      alert(`passwords don\'t matched`)
+      alert(`passwords don't matched`)
     else {
       const user = {
         username: username,
