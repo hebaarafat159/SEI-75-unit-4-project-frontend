@@ -1,4 +1,4 @@
-import { Box, Stack, FormControl, FormLabel, Input, Button, FormHelperText} from '@mui/joy';
+import { Box, Stack, FormControl, FormLabel, Input, Button, FormHelperText } from '@mui/joy';
 import { useState } from "react";
 import axios from "axios";
 import utils from '../utilities/util.js'
@@ -24,17 +24,19 @@ export default function Register() {
       //TODO show error
       alert(`passwords don't matched`)
     else {
-      const user = {
-        username: username,
-        password: password,
-        email: email,
+      const userData = {
+        user: {
+          username: username,
+          password: password,
+          email: email
+        },
         location: location
       };
-      console.log(`Register Data : ${JSON.stringify(user)}`)
-      if (user) {
+      console.log(`Register Data : ${JSON.stringify(userData)}`)
+      if (userData) {
         try {
           const { data } = await axios.post(
-            `${process.env.REACT_APP_URL_APP_PATH}/register/`, user,
+            `${process.env.REACT_APP_URL_APP_PATH}/customers/create/`, userData,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -45,7 +47,7 @@ export default function Register() {
           );
           // TODO handle save new user
           utils.storeLoggedInUser(data)
-          window.location.href = "/";
+          // window.location.href = "/";
         } catch (e) {
           console.log("logout not working", e);
         }

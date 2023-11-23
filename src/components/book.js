@@ -19,6 +19,8 @@ export default function Book({ book }) {
     const [selectedAuthor, setSelectedAuthor] = useState(null);
     const [authors, setAuthors] = useState([])
 
+    const [bookObject, setbookObject] = useState(null)
+
     const loadAuthors = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_URL_APP_PATH}/authors/`, {
@@ -44,6 +46,7 @@ export default function Book({ book }) {
             // Process the response data
             console.log(`Book Details List : ${JSON.stringify(response.data)}`);
             if (response.data) {
+                setbookObject(response.data)
                 // set Title
                 setTitle(response.data.title)
 
@@ -81,24 +84,32 @@ export default function Book({ book }) {
         saveBook(false)
     }
 
-    async function saveBook(forUpdate) {
-        const book = {
+    async function saveBook() {
+        // const book = {
+        //     title: title,
+        //     category: category,
+        //     description: description,
+        //     published_date: '2023-11-22',//publishedDate,
+        //     author: selectedAuthor
+        // };
+        // console.log(`Submit Book : ${JSON.stringify(book)}`)
+        // if (book) {
+            if (id === '0')
+                addBook()
+            else
+                updateBook()
+        // }
+    }
+
+    async function addBook() {
+        const newBook = {
             title: title,
             category: category,
             description: description,
             published_date: '2023-11-22',//publishedDate,
-            author: selectedAuthor
+            author: selectedAuthor,
+            cover_image: "jfhlwfhlwfj;e;o;wo"
         };
-        console.log(`Submit Book : ${JSON.stringify(book)}`)
-        if (book) {
-            if (!forUpdate)
-                addBook(book)
-            else
-                updateBook(book)
-        }
-    }
-
-    async function addBook(newBook) {
         // eslint-disable-next-line no-unused-vars
         const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/books/add/`, newBook,
             {
@@ -114,12 +125,19 @@ export default function Book({ book }) {
         console.log(`Saved Book : ${JSON.stringify(data)}`)
 
         // if (data.status === 200)
-        // window.location.href = "/";
+        window.location.href = "/";
     }
 
-    async function updateBook(book) {
+    async function updateBook() {
+        bookObject['title'] = title
+        bookObject['category'] = category
+        bookObject['description'] = description
+        bookObject['published_date'] = '2023-11-22'//publishedDate
+        bookObject['author'] = selectedAuthor
+        bookObject['cover_image'] = "jfhlwfhlwfj;e;o;wo"
+
         // eslint-disable-next-line no-unused-vars
-        const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/books/${book.id}/update/`, book,
+        const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/books/${bookObject.id}/update/`, bookObject,
             {
                 headers: {
                     "Content-Type": "application/json",
