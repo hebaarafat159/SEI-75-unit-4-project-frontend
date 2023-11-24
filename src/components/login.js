@@ -36,7 +36,8 @@ export default function Login() {
                 });
                 // Process the response data
                 console.log(`User Object List : ${JSON.stringify(userObject.data)}`);
-                utils.storeLoggedInUser(token.data, userObject.data)
+                utils.storeLoggedInUser(token.data)
+                utils.setUserObject(userObject.data)
                 if (userObject.data.id)
                     window.location.href = "/";
             } catch (error) {

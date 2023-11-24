@@ -5,6 +5,8 @@ import utils from '../utilities/util.js'
 import ReactGoogleAutocomplete from "react-google-autocomplete";
 
 export default function Register() {
+  const GOOGLE_PLACE_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+  console.log(`show google key: ${GOOGLE_PLACE_KEY}`)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -20,8 +22,9 @@ export default function Register() {
 
   async function submit(e) {
     e.preventDefault();
+    console.log(`show google key: ${GOOGLE_PLACE_KEY}`)
     if (password !== confirmPassword)
-      //TODO show error
+      // show error
       alert(`passwords don't matched`)
     else {
       const userData = {
@@ -32,6 +35,7 @@ export default function Register() {
         },
         location: location
       };
+
       console.log(`Register Data : ${JSON.stringify(userData)}`)
       if (userData) {
         try {
@@ -45,9 +49,11 @@ export default function Register() {
             },
             { withCredentials: true }
           );
-          // TODO handle save new user
-          utils.storeLoggedInUser(data)
-          window.location.href = "/login";
+
+          if (data.access) {
+            utils.storeLoggedInUser(data)
+            window.location.href = "/login";
+          }
         } catch (e) {
           console.log("logout not working", e);
         }
@@ -117,7 +123,7 @@ export default function Register() {
           <FormControl required>
             <FormLabel>Location</FormLabel>
             <ReactGoogleAutocomplete required
-              apiKey={'AIzaSyBdOVHEaQ9lAlTI1tCntVcGJamHsUmkLhU'}
+              apiKey={GOOGLE_PLACE_KEY}
               onPlaceSelected={onPlaceSelectedHandler}
             />
             {/* <Input

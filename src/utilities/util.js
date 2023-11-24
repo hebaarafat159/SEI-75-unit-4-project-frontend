@@ -11,7 +11,9 @@ export default {
     storeLoggedInUser,
     getRefreshToken,
     formateDate,
-    getUserObject
+    getUserObject,
+    setUserObject,
+    removeUserObject
 }
 
 function getUserToken() {
@@ -26,12 +28,11 @@ function removeUserToken() {
     localStorage.getItem(LOCAL_STORAGE_USER_TOKEN_KEY)
 }
 
-function storeLoggedInUser(token, userObject) {
+function storeLoggedInUser(token) {
     // Initialize the access & refresh token in localstorage.
     localStorage.clear();
     localStorage.setItem(LOCAL_STORAGE_USER_TOKEN_KEY, token.access);
     localStorage.setItem(LOCAL_STORAGE_REFRECH_TOKEN_KEY, token.refresh);
-    localStorage.setItem(LOCAL_STORAGE_USER_OBJECT_KEY, JSON.stringify(userObject));
     axios.defaults.headers.common["Authorization"] = `Bearer ${token["access"]}`;
 }
 
@@ -41,7 +42,13 @@ function getRefreshToken() {
 function getUserObject() {
     return localStorage.getItem(LOCAL_STORAGE_USER_OBJECT_KEY)
 }
+function setUserObject(userObject) {
+    localStorage.setItem(LOCAL_STORAGE_USER_OBJECT_KEY, JSON.stringify(userObject))
+}
 
+function removeUserObject() {
+    localStorage.getItem(LOCAL_STORAGE_USER_OBJECT_KEY)
+}
 function formateDate(date) {
     const formattedDate = dayjs(new Date(date)).format("YYYY-MM-DD")
     console.log(`formated Date: ${formattedDate}`)
