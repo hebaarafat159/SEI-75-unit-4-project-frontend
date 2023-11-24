@@ -1,7 +1,7 @@
 import { Box, Stack, FormControl, FormLabel, Input, Button, FormHelperText } from '@mui/joy';
 import { useState } from "react";
 import axios from "axios";
-import utils from '../utilities/util.js'
+// import utils from '../utilities/util.js'
 import ReactGoogleAutocomplete from "react-google-autocomplete";
 
 export default function Register() {
@@ -50,8 +50,7 @@ export default function Register() {
             { withCredentials: true }
           );
 
-          if (data.access) {
-            utils.storeLoggedInUser(data)
+          if (data.id) {
             window.location.href = "/login";
           }
         } catch (e) {

@@ -122,9 +122,9 @@ export default function Book({ book }) {
             },
         );
         console.log(`Saved Book : ${JSON.stringify(data)}`)
-
-        // if (data.status === 200)
-        // window.location.href = "/";
+        if (data.id) {
+            window.location.href = "/";
+        }
     }
 
     async function updateBook(owner) {
@@ -147,6 +147,10 @@ export default function Book({ book }) {
                 withCredentials: true
             },
         );
+        console.log(`Updated Book : ${JSON.stringify(data)}`)
+        if (data.id) {
+            window.location.href = "/";
+        }
     }
     return (
         <Box component="main"
@@ -229,7 +233,7 @@ export default function Book({ book }) {
                     <Select placeholder="Choose an author" onChange={(e, newValue) => {
                         let index = authors.findIndex(author => author.id === newValue);
                         if (index !== -1) {
-                            console.log(`Selected Author: ${JSON.stringify(authors[index])}` )
+                            console.log(`Selected Author: ${JSON.stringify(authors[index])}`)
                             setSelectedAuthor(authors[index])
                         }
                     }}>
