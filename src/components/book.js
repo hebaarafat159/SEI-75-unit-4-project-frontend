@@ -10,8 +10,8 @@ import { useParams } from 'react-router';
 
 export default function Book({ book }) {
     const { id } = useParams();
-    console.log(`UPdate Book : ${id}`)
-    // if(book) console.log(`UPdate Book : ${JSON.parse(book)}`)
+
+    const [cover, setCover] = useState(null);
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
     const [description, setDescription] = useState("");
@@ -25,6 +25,7 @@ export default function Book({ book }) {
         try {
             const response = await axios.get(`${process.env.REACT_APP_URL_APP_PATH}/authors/`, {
                 headers: {
+                    "Content-Type": "application/json",
                     Authorization: `Bearer ${utils.getUserToken()}`,
                 },
             });
@@ -40,6 +41,7 @@ export default function Book({ book }) {
         try {
             const response = await axios.get(`${process.env.REACT_APP_URL_APP_PATH}/books/${id}`, {
                 headers: {
+                    "Content-Type": "application/json",
                     Authorization: `Bearer ${utils.getUserToken()}`,
                 },
             });
@@ -47,6 +49,8 @@ export default function Book({ book }) {
             console.log(`Book Details List : ${JSON.stringify(response.data)}`);
             if (response.data) {
                 setbookObject(response.data)
+
+                setCover(response.data.cover_image)
                 // set Title
                 setTitle(response.data.title)
 
@@ -81,35 +85,30 @@ export default function Book({ book }) {
 
     async function submit(e) {
         e.preventDefault();
-        saveBook(false)
+        saveBook()
     }
 
     async function saveBook() {
-        // const book = {
-        //     title: title,
-        //     category: category,
-        //     description: description,
-        //     published_date: '2023-11-22',//publishedDate,
-        //     author: selectedAuthor
-        // };
-        // console.log(`Submit Book : ${JSON.stringify(book)}`)
-        // if (book) {
-            if (id === '0')
-                addBook()
-            else
-                updateBook()
-        // }
+        const owner = JSON.parse(utils.getUserObject())
+        console.log(`THe User : ${JSON.stringify(owner)}`)
+        if (id === '0')
+            addBook(owner)
+        else
+            updateBook(owner)
     }
 
-    async function addBook() {
+    async function addBook(owner) {
         const newBook = {
             title: title,
             category: category,
             description: description,
             published_date: '2023-11-22',//publishedDate,
-            author: selectedAuthor,
-            cover_image: "jfhlwfhlwfj;e;o;wo"
+            author_id: selectedAuthor.id,
+            cover_image: "jfhlwfhlwfj;e;o;wo",
+            customer_id: owner.id
         };
+
+        console.log(`Book : ${JSON.stringify(newBook)}`)
         // eslint-disable-next-line no-unused-vars
         const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/books/add/`, newBook,
             {
@@ -125,7 +124,7 @@ export default function Book({ book }) {
         console.log(`Saved Book : ${JSON.stringify(data)}`)
 
         // if (data.status === 200)
-        window.location.href = "/";
+        // window.location.href = "/";
     }
 
     async function updateBook() {
@@ -135,7 +134,7 @@ export default function Book({ book }) {
         bookObject['published_date'] = '2023-11-22'//publishedDate
         bookObject['author'] = selectedAuthor
         bookObject['cover_image'] = "jfhlwfhlwfj;e;o;wo"
-
+        bookObject['owner'] = utils.getUserObject()
         // eslint-disable-next-line no-unused-vars
         const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/books/${bookObject.id}/update/`, bookObject,
             {
@@ -170,6 +169,20 @@ export default function Book({ book }) {
             }}>
             <Stack gap={4} sx={{ mt: 2 }}>
                 <form onSubmit={submit}>
+                    {/* Cover Field */}
+                    {(cover) ? <img
+                        src={`${cover}?h=120&fit=crop&auto=format`}
+                        alt={cover}
+                        value={cover}
+                    /> : null}
+                    <FormControl required>
+                        <FormLabel>Cover Image</FormLabel>
+                        <Input
+                            type="text"
+                            name="cover"
+                            onChange={(e) => setCover(e.target.value)} />
+                    </FormControl>
+
                     {/* Title Field */}
                     <FormControl required>
                         <FormLabel>Title</FormLabel>
@@ -214,12 +227,14 @@ export default function Book({ book }) {
 
                     {/* Author Field */}
                     <Select placeholder="Choose an author" onChange={(e, newValue) => {
-                        let index = authors.findIndex(author => author.name === newValue);
-                        if (index !== -1)
+                        let index = authors.findIndex(author => author.id === newValue);
+                        if (index !== -1) {
+                            console.log(`Selected Author: ${JSON.stringify(authors[index])}` )
                             setSelectedAuthor(authors[index])
+                        }
                     }}>
                         {(authors) ? authors.map((auth) => (
-                            <Option key={auth.name} value={auth.name}>{auth.name}</Option>
+                            <Option key={auth.id} value={auth.id}>{auth.name}</Option>
                         )) : null}
                     </Select>
 

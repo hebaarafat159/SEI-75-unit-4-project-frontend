@@ -47,7 +47,7 @@ export default function Register() {
           );
           // TODO handle save new user
           utils.storeLoggedInUser(data)
-          // window.location.href = "/";
+          window.location.href = "/login";
         } catch (e) {
           console.log("logout not working", e);
         }

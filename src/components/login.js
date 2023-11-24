@@ -15,17 +15,33 @@ export default function Login() {
         };
         // console.log(`Submit Login : ${JSON.stringify(user)}`)
         if (user) {
-            const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/token/`, user,
-                {
-                    headers: { "Content-Type": "application/json" },
-                },
-                {
-                    withCredentials: true
-                },
-            );
+            try {
+                const token = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/token/`, user,
+                    {
+                        headers: { "Content-Type": "application/json" },
+                    },
+                    {
+                        withCredentials: true
+                    },
+                );
 
-            utils.storeLoggedInUser(data)
-            window.location.href = "/";
+                console.log(`Token: ${JSON.stringify(token.data)}`)
+
+
+                const userObject = await axios.get(`${process.env.REACT_APP_URL_APP_PATH}/customers/${user.username}/${user.password}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token.data.access}`,
+                    },
+                });
+                // Process the response data
+                console.log(`User Object List : ${JSON.stringify(userObject.data)}`);
+                utils.storeLoggedInUser(token.data, userObject.data)
+                if (userObject.data.id)
+                    window.location.href = "/";
+            } catch (error) {
+                console.error('Request failed', error);
+            }
         }
     }
 

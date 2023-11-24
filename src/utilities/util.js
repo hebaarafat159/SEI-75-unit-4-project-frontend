@@ -2,6 +2,7 @@ import axios from "axios";
 import dayjs from 'dayjs';
 const LOCAL_STORAGE_USER_TOKEN_KEY = "access_token"
 const LOCAL_STORAGE_REFRECH_TOKEN_KEY = "refresh_token"
+const LOCAL_STORAGE_USER_OBJECT_KEY = "user_object"
 /* eslint-disable import/no-anonymous-default-export */
 export default {
     getUserToken,
@@ -9,7 +10,8 @@ export default {
     removeUserToken,
     storeLoggedInUser,
     getRefreshToken,
-    formateDate
+    formateDate,
+    getUserObject
 }
 
 function getUserToken() {
@@ -24,16 +26,20 @@ function removeUserToken() {
     localStorage.getItem(LOCAL_STORAGE_USER_TOKEN_KEY)
 }
 
-function storeLoggedInUser(data) {
+function storeLoggedInUser(token, userObject) {
     // Initialize the access & refresh token in localstorage.
     localStorage.clear();
-    localStorage.setItem(LOCAL_STORAGE_USER_TOKEN_KEY, data.access);
-    localStorage.setItem(LOCAL_STORAGE_REFRECH_TOKEN_KEY, data.refresh);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${data["access"]}`;
+    localStorage.setItem(LOCAL_STORAGE_USER_TOKEN_KEY, token.access);
+    localStorage.setItem(LOCAL_STORAGE_REFRECH_TOKEN_KEY, token.refresh);
+    localStorage.setItem(LOCAL_STORAGE_USER_OBJECT_KEY, JSON.stringify(userObject));
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token["access"]}`;
 }
 
 function getRefreshToken() {
     return localStorage.getItem(LOCAL_STORAGE_REFRECH_TOKEN_KEY)
+}
+function getUserObject() {
+    return localStorage.getItem(LOCAL_STORAGE_USER_OBJECT_KEY)
 }
 
 function formateDate(date) {
