@@ -104,7 +104,7 @@ export default function Book({ book }) {
             description: description,
             published_date: '2023-11-22',//publishedDate,
             author_id: selectedAuthor.id,
-            cover_image: "jfhlwfhlwfj;e;o;wo",
+            cover_image: cover,
             customer_id: owner.id
         };
 
@@ -127,14 +127,14 @@ export default function Book({ book }) {
         // window.location.href = "/";
     }
 
-    async function updateBook() {
+    async function updateBook(owner) {
         bookObject['title'] = title
         bookObject['category'] = category
         bookObject['description'] = description
         bookObject['published_date'] = '2023-11-22'//publishedDate
-        bookObject['author'] = selectedAuthor
-        bookObject['cover_image'] = "jfhlwfhlwfj;e;o;wo"
-        bookObject['owner'] = utils.getUserObject()
+        bookObject['cover_image'] = cover
+        bookObject['customer_id'] = owner.id
+        bookObject['author_id'] = selectedAuthor.id
         // eslint-disable-next-line no-unused-vars
         const { data } = await axios.post(`${process.env.REACT_APP_URL_APP_PATH}/books/${bookObject.id}/update/`, bookObject,
             {
