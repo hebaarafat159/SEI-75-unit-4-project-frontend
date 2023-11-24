@@ -91,10 +91,14 @@ export default function Book({ book }) {
     async function saveBook() {
         const owner = JSON.parse(utils.getUserObject())
         console.log(`THe User : ${JSON.stringify(owner)}`)
-        if (id === '0')
-            addBook(owner)
-        else
-            updateBook(owner)
+        if (cover) {
+            if (id === '0')
+                addBook(owner)
+            else
+                updateBook(owner)
+        } else {
+            alert('please add cover image')
+        }
     }
 
     async function addBook(owner) {
@@ -175,17 +179,17 @@ export default function Book({ book }) {
                 <form onSubmit={submit}>
                     {/* Cover Field */}
                     {(cover) ? <img
-                        src={`${cover}?h=120&fit=crop&auto=format`}
-                        alt={cover}
+                        src={`${cover}`}
+                        alt=""
                         value={cover}
+                        height={300}
+                        width={250}
                     /> : null}
-                    <FormControl required>
-                        <FormLabel>Cover Image</FormLabel>
-                        <Input
-                            type="text"
-                            name="cover"
-                            onChange={(e) => setCover(e.target.value)} />
-                    </FormControl>
+                    <FormLabel>Cover Image</FormLabel>
+                    <Input
+                        type="text"
+                        name="cover"
+                        onChange={(e) => setCover(e.target.value)} />
 
                     {/* Title Field */}
                     <FormControl required>
@@ -223,14 +227,14 @@ export default function Book({ book }) {
                                 slotProps={{ textField: { size: 'small' } }}
                                 onChange={(date, event) => {
                                     console.log(utils.formateDate(date))
-                                    // TODO set the correct date
+                                    // set the correct date
                                     // setPublishedDate(utils.formateDate(date))
                                 }} />
                         </LocalizationProvider>
                     </FormControl>
 
                     {/* Author Field */}
-                    <Select placeholder="Choose an author" onChange={(e, newValue) => {
+                    <Select placeholder="Choose an author" value={(selectedAuthor && selectedAuthor.id)} onChange={(e, newValue) => {
                         let index = authors.findIndex(author => author.id === newValue);
                         if (index !== -1) {
                             console.log(`Selected Author: ${JSON.stringify(authors[index])}`)
