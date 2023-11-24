@@ -2,7 +2,7 @@ import { Stack, Button } from '@mui/joy';
 import axios from "axios";
 import utils from '../utilities/util.js'
 
-export default function ButtonsComponent({ book, removeBook }) {
+export default function ButtonsComponent({ book, removeBook, user }) {
 
     async function deleteBook(book) {
         // eslint-disable-next-line no-unused-vars
@@ -21,10 +21,16 @@ export default function ButtonsComponent({ book, removeBook }) {
         window.location.href = "/";
     }
 
-    return <Stack gap={4} sx={{ mt: 2 }}>
+    return (
         <Stack gap={4} sx={{ mt: 2 }}>
-            <Button fullWidth component="a" href={`/book/${book.id}`} book={book}> Edit {book.title} </Button>
-            <Button onClick={()=> deleteBook(book)} fullWidth> Delete {book.id}</Button>
-        </Stack>
-    </Stack>
+            {(user && user.id === book.customer.id) ? < Stack gap={4} sx={{ mt: 2 }}>
+                <Button fullWidth component="a" href={`/book/${book.id}`} book={book}> Edit </Button>
+                <Button onClick={() => deleteBook(book)} fullWidth> Delete </Button>
+            </Stack> :
+                < Stack gap={4} sx={{ mt: 2 }}>
+                    <Button fullWidth> Borrow </Button>
+                </Stack>
+            }
+
+        </Stack >)
 }

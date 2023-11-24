@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import utils from '../utilities/util.js'
 import ButtonsComponent from './buttonsComponent.js'
+import { Box, Stack, FormControl, FormLabel, Input, Button, Select, Option } from '@mui/joy';
+
 export default function Home() {
   // const [userToken, setUserToken] = useState(null)
+  const user = JSON.parse(utils.getUserObject())
+
   const [books, setBooks] = useState([])
   const [change, setChange] = useState(null)
 
@@ -38,10 +42,27 @@ export default function Home() {
     <div className="Auth-form-container">
       <h1> Home Page </h1>
       {(books) ? books.map((book) => (
-        <div>
-          <h4> ID : {book.id} , Title: {book.title}</h4>
-          <ButtonsComponent book={book} removeBook={removeBook} />
-        </div>
+        <Box component="main"
+          sx={{
+            vmy: 'auto',
+            py: 2,
+            pb: 5,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            width: 400,
+            maxWidth: '100%',
+            mx: 'auto',
+            borderRadius: 'sm',
+            '& form': {
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2,
+            }
+          }}>
+          <h4> {book.title}</h4>
+          <ButtonsComponent book={book} removeBook={removeBook} user={user} />
+        </Box>
       )) : null}
     </div>
   )
