@@ -1,22 +1,28 @@
 
 import { useEffect } from "react";
 import axios from "axios";
-import utils from '../utilities/util.js'
+// import utils from '../utilities/util.js'
 
-export default function Logout(){
+export default function Logout() {
   useEffect(() => {
     (async () => {
       try {
         // eslint-disable-next-line no-unused-vars
         const { data } = await axios.post(
-          `${process.env.REACT_APP_URL_APP_PATH}/logout/`,
+          `${process.env.REACT_APP_BACKEND_URL}/logout/`,
           {
-            refresh_token: utils.getRefreshToken(),
+            refresh_token: localStorage.getItem("refresh_token"),
           },
-          { headers: { "Content-Type": "application/json" } },
-          { withCredentials: true }
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+            }
+          }
         );
+
         localStorage.clear();
+        console.log("logout successfully");
         axios.defaults.headers.common["Authorization"] = null;
         window.location.href = "/login";
       } catch (e) {
@@ -25,4 +31,4 @@ export default function Logout(){
     })();
   }, []);
   return <div></div>;
-  }
+}
